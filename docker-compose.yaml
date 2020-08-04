@@ -1,0 +1,34 @@
+version: "3"
+
+networks:
+  custom-app:
+    driver: bridge
+
+services:
+  app:
+    build: .
+    depends_on:
+      - postrge
+    ports:
+      - 80:80
+    volumes:
+      - .:/src/app
+    networks:
+      - custom-app
+
+  postrge:
+    image: "postgres:12.1"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=animal
+    networks:
+      - custom-app
+
+  adminer:
+    image: "adminer:4.7.5"
+    ports:
+      - 8080:8080
+    networks:
+      - custom-app
+
